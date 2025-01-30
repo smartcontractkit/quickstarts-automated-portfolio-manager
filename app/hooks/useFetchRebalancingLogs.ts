@@ -1,35 +1,28 @@
 import { useEffect, useState } from "react";
-import { createPublicClient, http, parseAbiItem } from "viem";
-import { sepolia } from "wagmi/chains";
+import { parseAbiItem } from "viem";
+import { usePublicClient, useBlockNumber } from "wagmi";
 import { portfolioManagerConfig } from "../src/portfolioManagerConfig";
 
 const useFetchRebalancingLogs = () => {
   const [logs, setLogs] = useState<any[]>([]);
   const [loadingLogs, setLoadingLogs] = useState(false);
   const [logsError, setLogsError] = useState<Error | null>(null);
+  const publicClient = usePublicClient();
+  const { data: blockNumber } = useBlockNumber();
 
   useEffect(() => {
     const fetchLogs = async () => {
+      if (!blockNumber || !publicClient) return;
+
       setLoadingLogs(true);
       try {
-        const publicClient = createPublicClient({
-          chain: sepolia,
-          transport: http(),
-        });
-
-        // Fetch the latest block
-        const latestBlock = await publicClient.getBlock();
-        const latestBlockNumber = latestBlock.number;
-
         // Calculate the number of blocks for the last 10 days
-        const blocksPerDay = BigInt((60 * 60 * 24) / 12); // 12 seconds per block for Ethereum Sepolia, adjust as needed
+        const blocksPerDay = BigInt((60 * 60 * 24) / 12); /// 12 seconds per block for Ethereum Sepolia, adjust as needed
         const daysToFetch = 10;
         const blocksToFetch = blocksPerDay * BigInt(daysToFetch);
 
         // Calculate the starting block
-        const fromBlock = latestBlockNumber - blocksToFetch;
-
-        console.log(fromBlock);
+        const fromBlock = blockNumber - blocksToFetch;
 
         const fetchedLogs = await publicClient.getLogs({
           address: portfolioManagerConfig.address,
@@ -39,7 +32,6 @@ const useFetchRebalancingLogs = () => {
           fromBlock: fromBlock,
         });
 
-        // console.log(stringify(fetchedLogs));
         setLogs(fetchedLogs);
       } catch (err) {
         if (err instanceof Error) {
@@ -54,7 +46,7 @@ const useFetchRebalancingLogs = () => {
     };
 
     fetchLogs();
-  }, []);
+  }, [blockNumber, publicClient]);
 
   return { logs, loadingLogs, logsError };
 };

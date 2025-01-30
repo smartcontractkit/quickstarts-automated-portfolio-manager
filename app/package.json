@@ -10,12 +10,12 @@
   },
   "dependencies": {
     "@babel/core": "^7.24.5",
-    "@rainbow-me/rainbowkit": "^2.0.7",
+    "@rainbow-me/rainbowkit": "^2.0.10",
     "@tanstack/react-query": "^5.28.4",
     "next": "^14.2.3",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "viem": "^2.8.12",
+    "viem": "^2.10.8",
     "wagmi": "^2.5.11"
   },
   "devDependencies": {

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { createPublicClient, http, parseAbiItem } from "viem";
-import { useAccount } from "wagmi";
-import { sepolia } from "wagmi/chains";
+import { parseAbiItem } from "viem";
+import { useAccount, usePublicClient } from "wagmi";
 import { portfolioManagerConfig } from "../src/portfolioManagerConfig";
 
 const useFetchInvestmentsLogs = () => {
@@ -11,9 +10,10 @@ const useFetchInvestmentsLogs = () => {
   const [totalUSDCCost, setTotalUSDCCost] = useState(0);
   const [totalPMTAcquired, setTotalPMTAcquired] = useState(0);
   const { address } = useAccount();
+  const publicClient = usePublicClient();
 
   useEffect(() => {
-    if (!address) {
+    if (!address || !publicClient) {
       setLogs([]);
       setTotalUSDCCost(0);
       setTotalPMTAcquired(0);
@@ -26,11 +26,6 @@ const useFetchInvestmentsLogs = () => {
       let localTotalPMTAcquired = 0;
 
       try {
-        const publicClient = createPublicClient({
-          chain: sepolia,
-          transport: http(),
-        });
-
         const fetchedLogs = await publicClient.getLogs({
           address: portfolioManagerConfig.address,
           events: [
@@ -80,7 +75,7 @@ const useFetchInvestmentsLogs = () => {
     };
 
     fetchLogs();
-  }, [address]);
+  }, [address, publicClient]);
 
   return { logs, loadingLogs, logsError, totalUSDCCost, totalPMTAcquired };
 };
