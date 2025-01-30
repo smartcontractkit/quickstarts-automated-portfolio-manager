@@ -13,6 +13,7 @@ docs/
 # Dotenv file
 .env
 .env.enc
+.env.local
 node_modules/
 .notes.md
 broadcast/
