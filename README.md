@@ -1,5 +1,10 @@
 # Automated Portfolio Manager
 
+> ⚠️
+> **Deprecated Quickstart**
+>
+> **This quickstart is deprecated and no longer maintained.** The GVZ index API used in this tutorial is no longer available, which means this example will not work as written. We've kept this content available for educational reference only. **For new projects**, we strongly recommend using the [Chainlink Runtime Environment (CRE)](https://docs.chain.link/cre), which makes building applications like automated portfolio managers significantly easier. CRE provides a unified environment for combining offchain data, onchain operations, and computation—all with built-in orchestration and blockchain-level security. Learn more: [Getting Started with CRE](https://docs.chain.link/cre/getting-started/overview)
+
 ## Overview
 
 The Automated Portfolio Manager automatically rebalances an investment portfolio using real-time data from on-chain and off-chain sources. These contracts enable adjustments in asset allocations within a portfolio based on dynamic market conditions, sentiment scores, and volatility indicators such as the Gold Volatility Index (GVZ). This approach provides a modern way to manage digital assets.
